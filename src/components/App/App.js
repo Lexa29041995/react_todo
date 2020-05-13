@@ -5,23 +5,39 @@ import SearchBlock from '../SearchBlock';
 import TodoList from '../ToDoList';
 import './App.css';
 
+class App extends React.Component {
+  
+  state = {
+      todoData: [
+        {label:'Learn HTML', important:true, id: 1,},
+        {label:'Learn JS', important:true, id: 2,},
+        {label:'Learn REACT', important:false, id: 3,}
+      ]
+  };
 
-const App = () => {
+  deleteItem = (id) => {
+    this.setState(({ todoData }) => {
+      const index = todoData.findIndex((elem) => elem.id === id)
+      todoData.splice(index, 1);
+      
+      return {
+        todoData: todoData
+      }
+    });
+  }
 
-  const todoData = [
-    {label:'Learn HTML', important:true, id: 1,},
-    {label:'Learn JS', important:true, id: 2,},
-    {label:'Learn REACT', important:false, id: 3,}
-  ];
-
-  return (
+  render() {
+    return (
     <div className ='App'>
       <AppHeader />
       <SearchBlock />
-      <TodoList todoItems = {todoData} />
+      <TodoList todoItems = {this.state.todoData} onDelete= {this.deleteItem} />
     </div>
    
-);
+    );
+  }
 }
+
+
 
 export default App;
