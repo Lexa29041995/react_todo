@@ -24,8 +24,7 @@ class ToDoListItem extends React.Component {
                 >
                     { label }
                 </span>
-                <button className = 'btn btn-outline-success
-                 btn-important'
+                <button className = 'btn btn-outline-success btn-important'
                         onClick={ onToggleImportant }
                  >
                      <i className="fa fa-star" aria-hidden="true">

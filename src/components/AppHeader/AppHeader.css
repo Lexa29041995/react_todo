@@ -2,10 +2,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-};
+}
 
-.ToDoCounter {
-    width: 40%;
+.todoCounter {
     display: flex;
     justify-content: space-between;
-};
+    align-items: center;
+    width: 40%;
+}
+
