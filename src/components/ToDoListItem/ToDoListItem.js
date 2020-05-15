@@ -4,30 +4,9 @@ import './ToDoListItem.css'
 
 class ToDoListItem extends React.Component {
 
-    state = {
-        done:false,
-        important: false,
-    };
-
-    onLabelClick = () => {
-        this.setState((state) => {
-            return {
-                done: !state.done
-            };
-        });
-    };
-    onImportantBtnClisc = () => {
-        this.setState((state) =>{
-            return{
-                important: !state.important
-            }
-            
-        });
-    }
-
     render() {
-        const { label, onDelete } = this.props;
-        const { done, important } = this.state;
+        const { label, onDelete, done, important,
+             onToggleImportant, onToggleDone } = this.props;
 
         let classNames = 'todo-list-item';
         if (done) {
@@ -41,21 +20,23 @@ class ToDoListItem extends React.Component {
             <div className = {classNames}>
                 <span
                     className = 'todo-list-label'
-                    onClick={ this.onLabelClick }
+                    onClick={ onToggleDone }
                 >
                     { label }
                 </span>
                 <button className = 'btn btn-outline-success
                  btn-important'
-                 onClick={this.onImportantBtnClisc}
+                        onClick={ onToggleImportant }
                  >
                      <i className="fa fa-star" aria-hidden="true">
-                    </i></button>
+                    </i>
+                </button>
                 <button className = 'btn btn-outline-danger'
-                onClick = { onDelete }
+                        onClick = { onDelete }
                 >
                     <i className="fa fa-trash" aria-hidden="true">
-                    </i></button>
+                    </i>
+                </button>
             </div>
             
         );
