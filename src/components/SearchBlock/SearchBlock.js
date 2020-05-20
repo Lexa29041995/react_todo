@@ -4,10 +4,12 @@ import ItemStatusFilter from '../ItemStatusFilter';
 
 
 const SearchBlock = () => {
-    const searchBlockText = 'What do you want?'
+    const searchBlockText = 'What do you want to search?'
     return (
-    <div className = 'search-block'>
-      <input placeholder = {searchBlockText} />
+    <div className = 'SearchBlock d-flex'>
+      <input  
+        className = 'form-control mr-3' 
+        placeholder = {searchBlockText} />
       <ItemStatusFilter />
     </div>
     )}

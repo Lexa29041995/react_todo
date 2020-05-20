@@ -15,7 +15,8 @@ class App extends React.Component {
         {label:'Learn HTML', important:false, done:false, id: 1,},
         {label:'Learn JS', important:false, done:false, id: 2,},
         {label:'Learn REACT', important:false, done:false, id: 3,}
-      ]
+      ],
+      detectedText: '',
   };
 
   deleteItem = (id) => {
@@ -49,21 +50,23 @@ class App extends React.Component {
     });
   }
 
+  toggleProp = (id, arr, prop) => {
+    const index = arr.findIndex((elem) => elem.id === id);
+
+    const oldObject = arr[index];
+    const newObj = {...oldObject, [prop]: !oldObject[prop]};
+
+    return [
+      ...arr.slice(0, index),
+      newObj,
+      ...arr.slice(index + 1)
+    ];
+  }
+  
   toggleDone = (id) => {
     this.setState(({todoData}) => {
-      const index = todoData.findIndex((elem) => elem.id === id);
-
-      const oldObject = todoData[index];
-      const newObj = {...oldObject, done: !oldObject.done};
-
-      const newArr = [
-        ...todoData.slice(0, index),
-        newObj,
-        ...todoData.slice(index+1)
-      ];
-  
       return {
-        todoData: newArr
+        todoData: this.toggleProp(id, todoData, 'done')
       }
     });
   }
@@ -71,34 +74,35 @@ class App extends React.Component {
 
   toggleImportant = (id) => {
     this.setState(({todoData}) => {
-      const index = todoData.findIndex((elem) => elem.id === id);
-
-      const oldObject = todoData[index];
-      const newObj = {...oldObject, important: !oldObject.important};
-
-      const newArr = [
-        ...todoData.slice(0, index),
-        newObj,
-        ...todoData.slice(index+1)
-      ];
-  
       return {
-        todoData: newArr
+        todoData: this.toggleProp(id, todoData, 'important')
       }
     });
   }
 
+  search = (arr, detectedText) => {
+    if (detectedText.length === 0) {
+      return arr;
+    }
+
+    return arr.filter((el)=>{
+      return el.label.indexOf(detectedText) > -1;
+    });
+  } 
+  
   render() {
 
-const done = this.state.todoData.filter((el) => el.done).length;
-const todo = this.state.todoData.length - done;
+  const {todoData, detectedText} = this.state;
+  const detectedItems = this.search(todoData, detectedText)
+  const done = todoData.filter((el) => el.done).length;
+  const todo = todoData.length - done;
 
     return (
     <div className ='App'>
       <AppHeader toDo = {todo} done = {done}/>
       <SearchBlock />
       <TodoList 
-        todoItems = {this.state.todoData} 
+        todoItems = {detectedItems} 
         onDelete= {this.deleteItem}
         onToggleImportant = {this.toggleImportant}
         onToggleDone = {this.toggleDone} 
