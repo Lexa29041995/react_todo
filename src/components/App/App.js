@@ -5,6 +5,7 @@ import AppHeader from '../AppHeader';
 import SearchBlock from '../SearchBlock';
 import TodoList from '../ToDoList';
 import ItemAddForm from '../ItemAddForm';
+import ItemStatusFilter from '../ItemStatusFilter';
 
 class App extends React.Component {
   
@@ -17,6 +18,7 @@ class App extends React.Component {
         {label:'Learn REACT', important:false, done:false, id: 3,}
       ],
       detectedText: '',
+      filter: 'all'// all, active, done
   };
 
   deleteItem = (id) => {
@@ -80,27 +82,55 @@ class App extends React.Component {
     });
   }
 
+  onSearchChange = (detectedText) => {
+    this.setState({detectedText});
+  }
+
   search = (arr, detectedText) => {
     if (detectedText.length === 0) {
       return arr;
     }
 
     return arr.filter((el)=>{
-      return el.label.indexOf(detectedText) > -1;
+      return el.label.toUpperCase().indexOf(detectedText.toUpperCase()) > -1;
     });
   } 
   
+  itemsFilter = (arr, filterText) => {
+    switch(filterText) {
+      case 'all':
+        return arr;
+      case 'active':
+        return arr.filter((el) => !el.done);
+      case 'done':
+        return arr.filter((el) => el.done);
+      default:
+        return arr;
+    }
+  }
+
+  onItemsFilterChange = (filter => {
+    this.setState({filter});
+  })
   render() {
 
-  const {todoData, detectedText} = this.state;
-  const detectedItems = this.search(todoData, detectedText)
+  const { todoData, detectedText, filter } = this.state;
+  const detectedItems = this.itemsFilter(this.search(todoData, detectedText), filter);
   const done = todoData.filter((el) => el.done).length;
   const todo = todoData.length - done;
 
     return (
     <div className ='App'>
       <AppHeader toDo = {todo} done = {done}/>
-      <SearchBlock />
+      <div className ='searchPanel d-flex'>
+        <SearchBlock
+          onSearchChange ={this.onSearchChange}
+        />
+        <ItemStatusFilter 
+          filter = {filter}
+          onItemsFilterChange = {this.onItemsFilterChange}
+        />
+      </div>
       <TodoList 
         todoItems = {detectedItems} 
         onDelete= {this.deleteItem}
